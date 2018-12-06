@@ -20,6 +20,20 @@ var stations;
 
 var station_icon = "MBTA_icon.png";
 var train_icon = "train.png";
+var cycle = 0;
+
+var count = 30;
+    var x = setInterval(function() {
+        if (count == 0)
+            count = 30;
+        count = count - 1;
+        document.getElementById("timer").innerHTML = count + " seconds until refresh";
+
+    }, 1000);
+
+var intervalID = window.setInterval(vehicle, 30000); //refreshes every 30 seconds
+
+
 
 
 function init() {
@@ -27,6 +41,7 @@ function init() {
     south = new google.maps.LatLng(42.3519, -71.0551);
     map.panTo(south);
     renderMap();
+
 
     //getMyLocation();
 }
@@ -348,13 +363,17 @@ function green_helper(line)
     request.send();
 }
 
-
 function vehicle(){
+
+    cycle++;
+
+    
 
     var request = new XMLHttpRequest();
     address = "https://api-v3.mbta.com/vehicles?include=stop&filter[route]=Red";
 
     request.open("GET", address, true);
+
 
     request.onreadystatechange = function() {
 
@@ -362,17 +381,19 @@ function vehicle(){
         {
             theData = request.responseText;
             trains = JSON.parse(theData);
-         
+            //console.log(cycle);
+            
+            
+
             train_ray = new Array(trains.data.length);
+            //console.log("length: ", trains.data.length);
            
             for (i = 0; i < trains.data.length; i++) {
                 lat = trains.data[i].attributes.latitude;
                 lon = trains.data[i].attributes.longitude;
                 var loc = new google.maps.LatLng(lat, lon);
                 station = trains.included[i].attributes.name;
-                console.log(station);
-                console.log(i);
-
+        
                 train_ray[i] = new google.maps.Marker({
                     position: loc,
                     icon: train_icon,
@@ -387,4 +408,21 @@ function vehicle(){
 
     request.send();
 
+    if(cycle > 1){
+                old_ray = new Array(train_ray.length);
+                for(i = 0; i  < train_ray.length; i++)
+                    old_ray[i] =  train_ray[i];
+                //console.log("old length: ", old_ray.length);
+                i = 0;
+                while (old_ray[i] != undefined){
+                    old_ray[i].setMap(null);
+                    i++;
+                }
+
+                old_ray = [];
+            }
+
 }
+
+
+
