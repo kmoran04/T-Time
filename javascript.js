@@ -19,7 +19,7 @@ var marker_ray;
 var stations;
 
 var station_icon = "MBTA_icon.png";
-var train_icon = "train.png";
+//var train_icon = "train.png";
 var cycle = 0;
 
 var count = 30;
@@ -31,7 +31,7 @@ var count = 30;
 
     }, 1000);
 
-var intervalID = window.setInterval(vehicle, 30000); //refreshes every 30 seconds
+var intervalID = window.setInterval(vehicle_helper, 30000); //refreshes every 30 seconds
 
 
 
@@ -87,7 +87,7 @@ function renderMap() {
     blue();
     red();
     green();
-    vehicle();
+    vehicle_helper();
 }
 
 
@@ -204,7 +204,8 @@ function orange_line(){
                 orange_ray[j] = new google.maps.Marker({
                     position: stop,
                     icon: station_icon,
-                    title: "<h1>" + paths.included[j].attributes.name + "</h1>"
+                    title: "<h1>" + paths.included[j].attributes.name + "</h1>",
+                    zIndex: 0
                 });
             
                 orange_ray[j].setMap(map);
@@ -363,14 +364,38 @@ function green_helper(line)
     request.send();
 }
 
-function vehicle(){
-
+function vehicle_helper(){
     cycle++;
+    red_vehicles("Red");
+    blue_vehicles("Blue");
+    orange_vehicles("Orange");
+    gb_vehicles("Green-B");
+    gc_vehicles("Green-C");
+    gd_vehicles("Green-D");
+    ge_vehicles("Green-E");
+}
 
-    
+
+function red_vehicles(route){
+
+    var train_icon = "train_" + route + ".png";
+
+    if(cycle > 1){
+        rold_ray = new Array(rtrain_ray.length);
+         for(i = 0; i  < rtrain_ray.length; i++)
+            rold_ray[i] =  rtrain_ray[i];
+        //console.log("old length: ", old_ray.length);
+        i = 0;
+        while (rold_ray[i] != undefined){
+            rold_ray[i].setMap(null);
+            i++;
+        }
+
+        rold_ray = [];
+    }
 
     var request = new XMLHttpRequest();
-    address = "https://api-v3.mbta.com/vehicles?include=stop&filter[route]=Red";
+    address = "https://api-v3.mbta.com/vehicles?include=stop&filter[route]=" + route;
 
     request.open("GET", address, true);
 
@@ -381,11 +406,9 @@ function vehicle(){
         {
             theData = request.responseText;
             trains = JSON.parse(theData);
-            //console.log(cycle);
-            
-            
+            //console.log(cycle);  
 
-            train_ray = new Array(trains.data.length);
+            rtrain_ray = new Array(trains.data.length);
             //console.log("length: ", trains.data.length);
            
             for (i = 0; i < trains.data.length; i++) {
@@ -394,13 +417,13 @@ function vehicle(){
                 var loc = new google.maps.LatLng(lat, lon);
                 station = trains.included[i].attributes.name;
         
-                train_ray[i] = new google.maps.Marker({
+                rtrain_ray[i] = new google.maps.Marker({
                     position: loc,
                     icon: train_icon,
                     title: "<h1>" + station + "</h1>"
                 });
 
-                train_ray[i].setMap(map);
+                rtrain_ray[i].setMap(map);
             }
             
         }
@@ -408,21 +431,351 @@ function vehicle(){
 
     request.send();
 
-    if(cycle > 1){
-                old_ray = new Array(train_ray.length);
-                for(i = 0; i  < train_ray.length; i++)
-                    old_ray[i] =  train_ray[i];
-                //console.log("old length: ", old_ray.length);
-                i = 0;
-                while (old_ray[i] != undefined){
-                    old_ray[i].setMap(null);
-                    i++;
-                }
-
-                old_ray = [];
-            }
+    
 
 }
 
 
 
+function blue_vehicles(route){
+
+    var train_icon = "train_" + route + ".png";
+
+    if(cycle > 1){
+        bold_ray = new Array(btrain_ray.length);
+         for(i = 0; i  < btrain_ray.length; i++)
+            bold_ray[i] =  btrain_ray[i];
+        //console.log("old length: ", old_ray.length);
+        i = 0;
+        while (bold_ray[i] != undefined){
+            bold_ray[i].setMap(null);
+            i++;
+        }
+
+        bold_ray = [];
+    }
+
+    var request = new XMLHttpRequest();
+    address = "https://api-v3.mbta.com/vehicles?include=stop&filter[route]=" + route;
+
+    request.open("GET", address, true);
+
+
+    request.onreadystatechange = function() {
+
+        if (request.readyState == 4 && request.status == 200) 
+        {
+            theData = request.responseText;
+            trains = JSON.parse(theData);
+            //console.log(cycle);  
+
+            btrain_ray = new Array(trains.data.length);
+            //console.log("length: ", trains.data.length);
+           
+            for (i = 0; i < trains.data.length; i++) {
+                lat = trains.data[i].attributes.latitude;
+                lon = trains.data[i].attributes.longitude;
+                var loc = new google.maps.LatLng(lat, lon);
+                station = trains.included[i].attributes.name;
+        
+                btrain_ray[i] = new google.maps.Marker({
+                    position: loc,
+                    icon: train_icon,
+                    title: "<h1>" + station + "</h1>"
+                });
+
+                btrain_ray[i].setMap(map);
+            }
+            
+        }
+    }
+
+    request.send();
+
+}
+
+function orange_vehicles(route){
+
+    var train_icon = "train_" + route + ".png";
+
+    if(cycle > 1){
+        oold_ray = new Array(otrain_ray.length);
+         for(i = 0; i  < otrain_ray.length; i++)
+            oold_ray[i] =  otrain_ray[i];
+        //console.log("old length: ", old_ray.length);
+        i = 0;
+        while (oold_ray[i] != undefined){
+            oold_ray[i].setMap(null);
+            i++;
+        }
+
+        oold_ray = [];
+    }
+
+    var request = new XMLHttpRequest();
+    address = "https://api-v3.mbta.com/vehicles?include=stop&filter[route]=" + route;
+
+    request.open("GET", address, true);
+
+
+    request.onreadystatechange = function() {
+
+        if (request.readyState == 4 && request.status == 200) 
+        {
+            theData = request.responseText;
+            trains = JSON.parse(theData);
+            //console.log(cycle);  
+
+            otrain_ray = new Array(trains.data.length);
+            //console.log("length: ", trains.data.length);
+           
+            for (i = 0; i < trains.data.length; i++) {
+                lat = trains.data[i].attributes.latitude;
+                lon = trains.data[i].attributes.longitude;
+                var loc = new google.maps.LatLng(lat, lon);
+                station = trains.included[i].attributes.name;
+        
+                otrain_ray[i] = new google.maps.Marker({
+                    position: loc,
+                    icon: train_icon,
+                    title: "<h1>" + station + "</h1>",
+                    zIndex: 10
+                });
+
+                otrain_ray[i].setMap(map);
+            }
+            
+        }
+    }
+
+    request.send();
+
+}
+
+function gb_vehicles(route){
+
+    var train_icon = "train_" + route + ".png";
+
+    if(cycle > 1){
+        gbold_ray = new Array(gbtrain_ray.length);
+         for(i = 0; i  < gbtrain_ray.length; i++)
+            gbold_ray[i] =  gbtrain_ray[i];
+        //console.log("old length: ", old_ray.length);
+        i = 0;
+        while (gbold_ray[i] != undefined){
+            gbold_ray[i].setMap(null);
+            i++;
+        }
+
+        gbold_ray = [];
+    }
+
+    var request = new XMLHttpRequest();
+    address = "https://api-v3.mbta.com/vehicles?include=stop&filter[route]=" + route;
+
+    request.open("GET", address, true);
+
+
+    request.onreadystatechange = function() {
+
+        if (request.readyState == 4 && request.status == 200) 
+        {
+            theData = request.responseText;
+            trains = JSON.parse(theData);
+            //console.log(cycle);  
+
+            gbtrain_ray = new Array(trains.data.length);
+            //console.log("length: ", trains.data.length);
+           
+            for (i = 0; i < trains.data.length; i++) {
+                lat = trains.data[i].attributes.latitude;
+                lon = trains.data[i].attributes.longitude;
+                var loc = new google.maps.LatLng(lat, lon);
+                station = trains.included[i].attributes.name;
+        
+                gbtrain_ray[i] = new google.maps.Marker({
+                    position: loc,
+                    icon: train_icon,
+                    title: "<h1>" + station + "</h1>"
+                });
+
+                gbtrain_ray[i].setMap(map);
+            }
+            
+        }
+    }
+
+    request.send();
+
+}
+
+function gc_vehicles(route){
+
+    var train_icon = "train_" + route + ".png";
+
+    if(cycle > 1){
+        gcold_ray = new Array(gctrain_ray.length);
+         for(i = 0; i  < gctrain_ray.length; i++)
+            gcold_ray[i] =  gctrain_ray[i];
+        //console.log("old length: ", old_ray.length);
+        i = 0;
+        while (gcold_ray[i] != undefined){
+            gcold_ray[i].setMap(null);
+            i++;
+        }
+
+        gcold_ray = [];
+    }
+
+    var request = new XMLHttpRequest();
+    address = "https://api-v3.mbta.com/vehicles?include=stop&filter[route]=" + route;
+
+    request.open("GET", address, true);
+
+
+    request.onreadystatechange = function() {
+
+        if (request.readyState == 4 && request.status == 200) 
+        {
+            theData = request.responseText;
+            trains = JSON.parse(theData);
+            //console.log(cycle);  
+
+            gctrain_ray = new Array(trains.data.length);
+            //console.log("length: ", trains.data.length);
+           
+            for (i = 0; i < trains.data.length; i++) {
+                lat = trains.data[i].attributes.latitude;
+                lon = trains.data[i].attributes.longitude;
+                var loc = new google.maps.LatLng(lat, lon);
+                station = trains.included[i].attributes.name;
+        
+                gctrain_ray[i] = new google.maps.Marker({
+                    position: loc,
+                    icon: train_icon,
+                    title: "<h1>" + station + "</h1>"
+                });
+
+                gctrain_ray[i].setMap(map);
+            }
+            
+        }
+    }
+
+    request.send();
+
+}
+
+function gd_vehicles(route){
+
+    var train_icon = "train_" + route + ".png";
+
+    if(cycle > 1){
+        gdold_ray = new Array(gdtrain_ray.length);
+         for(i = 0; i  < gdtrain_ray.length; i++)
+            gdold_ray[i] =  gdtrain_ray[i];
+        //console.log("old length: ", old_ray.length);
+        i = 0;
+        while (gdold_ray[i] != undefined){
+            gdold_ray[i].setMap(null);
+            i++;
+        }
+
+        gdold_ray = [];
+    }
+
+    var request = new XMLHttpRequest();
+    address = "https://api-v3.mbta.com/vehicles?include=stop&filter[route]=" + route;
+
+    request.open("GET", address, true);
+
+
+    request.onreadystatechange = function() {
+
+        if (request.readyState == 4 && request.status == 200) 
+        {
+            theData = request.responseText;
+            trains = JSON.parse(theData);
+            //console.log(cycle);  
+
+            gdtrain_ray = new Array(trains.data.length);
+            //console.log("length: ", trains.data.length);
+           
+            for (i = 0; i < trains.data.length; i++) {
+                lat = trains.data[i].attributes.latitude;
+                lon = trains.data[i].attributes.longitude;
+                var loc = new google.maps.LatLng(lat, lon);
+                station = trains.included[i].attributes.name;
+        
+                gdtrain_ray[i] = new google.maps.Marker({
+                    position: loc,
+                    icon: train_icon,
+                    title: "<h1>" + station + "</h1>"
+                });
+
+                gdtrain_ray[i].setMap(map);
+            }
+            
+        }
+    }
+
+    request.send();
+
+}
+
+function ge_vehicles(route){
+
+    var train_icon = "train_" + route + ".png";
+
+    if(cycle > 1){
+        geold_ray = new Array(getrain_ray.length);
+         for(i = 0; i  < getrain_ray.length; i++)
+            geold_ray[i] =  getrain_ray[i];
+        //console.log("old length: ", old_ray.length);
+        i = 0;
+        while (geold_ray[i] != undefined){
+            geold_ray[i].setMap(null);
+            i++;
+        }
+
+        geold_ray = [];
+    }
+
+    var request = new XMLHttpRequest();
+    address = "https://api-v3.mbta.com/vehicles?include=stop&filter[route]=" + route;
+
+    request.open("GET", address, true);
+
+
+    request.onreadystatechange = function() {
+
+        if (request.readyState == 4 && request.status == 200) 
+        {
+            theData = request.responseText;
+            trains = JSON.parse(theData);
+            //console.log(cycle);  
+
+            getrain_ray = new Array(trains.data.length);
+            //console.log("length: ", trains.data.length);
+           
+            for (i = 0; i < trains.data.length; i++) {
+                lat = trains.data[i].attributes.latitude;
+                lon = trains.data[i].attributes.longitude;
+                var loc = new google.maps.LatLng(lat, lon);
+                station = trains.included[i].attributes.name;
+        
+                getrain_ray[i] = new google.maps.Marker({
+                    position: loc,
+                    icon: train_icon,
+                    title: "<h1>" + station + "</h1>"
+                });
+
+                getrain_ray[i].setMap(map);
+            }
+            
+        }
+    }
+
+    request.send();
+
+}
