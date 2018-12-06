@@ -42,25 +42,6 @@ function init() {
 }
 
 function renderMap() {
-
-    /*marker_ray = new Array(stations.stops.length);
-    var i;
-
-    infowindow = new google.maps.InfoWindow();
-
-    for (i = 0; i < stations.stops.length; i++){
-
-        var stop = new google.maps.LatLng(stations.stops[i].lat, stations.stops[i].long);
-        marker_ray[i] = new google.maps.Marker({
-            position: stop,
-            icon: station_icon,
-            title: "<h1>" + stations.stops[i].name + "</h1>"
-        });
-        marker_ray[i].setMap(map);
-        
-        windows(stations.stops[i].id, marker_ray[i]);
-        
-    }*/
     
     var temp = new google.maps.Polyline({});
     orange_line();
@@ -70,61 +51,6 @@ function renderMap() {
     vehicle_helper();
 }
 
-
-function windows(id, marker) {
-    var content = '<p>';
-
-    var request = new XMLHttpRequest();
-    address = "https://api-v3.mbta.com/predictions?filter[route]=Red&filter[stop]=" + id + "&page[limit]=10&page[offset]=0&sort=departure_time&api_key=6cce7cd3b50f43d28e450bf98d43e4d7";
-
-    request.open("GET", address, true);
-
-    request.onreadystatechange = function() {
-        if (request.readyState == 4 && request.status == 200) 
-        {
-            var time;
-            var direction;
-            theData = request.responseText;
-            station = JSON.parse(theData);
-
-
-            for (j = 0; j < station.data.length; j++) {
-
-                current = station.data[j];
-
-                if (current.attributes.direction_id == 1)
-                    direction = "Northbound (Alewife)";
-                else
-                    direction = "Southbound (Ashmont/Braintree)";
-
-                time = current.attributes.departure_time;
-
-                var dir = "Departing";
-
-                if (time == null){
-                    time = current.attributes.arrival_time;
-                    dir = "Arriving";
-                }
-
-                if (time != null)
-                    time = time.substr(11, 8);
-                else
-                    time = "No time available";
-
-                content += '<p>' +dir + ': ' + time + ', ' + direction + '</p>';
-            }
-            content += '</p>';
-
-            if (content == '<p></p>')
-                content = "Not available";
-
-            addInfoWindow(marker, content);
-            
-        }
-    }
-
-    request.send();
-}
 
 function addInfoWindow(marker, message) {
     var infoWindow = new google.maps.InfoWindow({
@@ -136,19 +62,6 @@ function addInfoWindow(marker, message) {
     });
 }
 
-function centerOnMe() {
-
-    getMyLocation();
-
-    me = new google.maps.LatLng(myLat, myLng);
-    // Update map and go there...
-    map.panTo(me);
-
-}
-
-function m_miles(m){
-    return (m/1609.344).toFixed(3);
-}
 
 
 function orange_line(){
@@ -184,9 +97,13 @@ function orange_line(){
                 orange_ray[j] = new google.maps.Marker({
                     position: stop,
                     icon: station_icon,
-                    title: "<h1>" + paths.included[j].attributes.name + "</h1>",
-                    zIndex: 0
+                    title: "<h1>Station: " + paths.included[j].attributes.name + "</h1>"
                 });
+
+
+                content = "";
+                
+                addInfoWindow(orange_ray[j], content);
             
                 orange_ray[j].setMap(map);
                 
@@ -230,8 +147,13 @@ function blue() {
                 blue_ray[j] = new google.maps.Marker({
                     position: stop,
                     icon: station_icon,
-                    title: "<h1>" + paths.included[j].attributes.name + "</h1>"
+                    title: "<h1>Station: " + paths.included[j].attributes.name + "</h1>"
                 });
+
+
+                content = "";
+                
+                addInfoWindow(blue_ray[j], content);
             
                 blue_ray[j].setMap(map);
             
@@ -275,8 +197,13 @@ function red() {
                     red_ray[j] = new google.maps.Marker({
                     position: stop,
                     icon: station_icon,
-                    title: "<h1>" + paths.included[j].attributes.name + "</h1>"
+                    title: "<h1>Station: " + paths.included[j].attributes.name + "</h1>"
                 });
+
+
+                content = "";
+                
+                addInfoWindow(red_ray[j], content);
             
                 red_ray[j].setMap(map);
             }
@@ -332,9 +259,13 @@ function green_helper(line)
                     green_ray[j] = new google.maps.Marker({
                     position: stop,
                     icon: station_icon,
-                    title: "<h1>" + paths.included[j].attributes.name + "</h1>"
+                    title: "<h1>Station: " + paths.included[j].attributes.name + "</h1>"
                 });
-            
+
+
+                content = "";
+                
+                addInfoWindow(green_ray[j], content);
                 green_ray[j].setMap(map);
             }
                 
@@ -397,6 +328,10 @@ function red_vehicles(route){
                 lat = trains.data[i].attributes.latitude;
                 lon = trains.data[i].attributes.longitude;
                 var loc = new google.maps.LatLng(lat, lon);
+                if(dir == 0)
+                    dir = "Southbound";
+                else
+                    dir = "Northbound";
                 for (j = 0; j < trains.included.length; j++){
                     if(trains.included[j].id == trains.data[i].relationships.stop.data.id){
                         name = trains.included[j].attributes.name;
@@ -410,7 +345,7 @@ function red_vehicles(route){
                 rtrain_ray[i] = new google.maps.Marker({
                     position: loc,
                     icon: train_icon,
-                    title: "<h1>" + status + " " + name + "</h1>"
+                    title: "<h1>" + status + " " + name + " (" + dir + ")</h1>"
                 });
 
                 content =  "<p>" + status + " " + name + "</p>";
@@ -471,6 +406,10 @@ function blue_vehicles(route){
                 lat = trains.data[i].attributes.latitude;
                 lon = trains.data[i].attributes.longitude;
                 var loc = new google.maps.LatLng(lat, lon);
+                if(dir == 0)
+                    dir = "Southbound";
+                else
+                    dir = "Northbound";
                 for (j = 0; j < trains.included.length; j++){
                     if(trains.included[j].id == trains.data[i].relationships.stop.data.id){
                         name = trains.included[j].attributes.name;
@@ -483,7 +422,7 @@ function blue_vehicles(route){
                 btrain_ray[i] = new google.maps.Marker({
                     position: loc,
                     icon: train_icon,
-                    title: "<h1>" + status + " " + name + "</h1>"
+                    title: "<h1>" + status + " " + name + " (" + dir + ")</h1>"
                 });
 
                 content =  "<p>" + status + " " + name + "</p>";
@@ -538,6 +477,10 @@ function orange_vehicles(route){
                 lat = trains.data[i].attributes.latitude;
                 lon = trains.data[i].attributes.longitude;
                 var loc = new google.maps.LatLng(lat, lon);
+                if(dir == 0)
+                    dir = "Southbound";
+                else
+                    dir = "Northbound";
                 for (j = 0; j < trains.included.length; j++){
                     if(trains.included[j].id == trains.data[i].relationships.stop.data.id){
                         name = trains.included[j].attributes.name;
@@ -550,7 +493,7 @@ function orange_vehicles(route){
                 otrain_ray[i] = new google.maps.Marker({
                     position: loc,
                     icon: train_icon,
-                    title: "<h1>" + status + " " + name + "</h1>"
+                   title: "<h1>" + status + " " + name + " (" + dir + ")</h1>"
                 });
 
                 content =  "<p>" + status + " " + name + "</p>";
@@ -605,6 +548,10 @@ function gb_vehicles(route){
                 lat = trains.data[i].attributes.latitude;
                 lon = trains.data[i].attributes.longitude;
                 var loc = new google.maps.LatLng(lat, lon);
+                if(dir == 0)
+                    dir = "Southbound";
+                else
+                    dir = "Northbound";
                 for (j = 0; j < trains.included.length; j++){
                     if(trains.included[j].id == trains.data[i].relationships.stop.data.id){
                         name = trains.included[j].attributes.name;
@@ -617,7 +564,7 @@ function gb_vehicles(route){
                 gbtrain_ray[i] = new google.maps.Marker({
                     position: loc,
                     icon: train_icon,
-                    title: "<h1>" + status + " " + name + "</h1>"
+                    title: "<h1>" + status + " " + name + " (" + dir + ")</h1>"
                 });
 
                 content =  "<p>" + status + " " + name + "</p>";
@@ -672,6 +619,10 @@ function gc_vehicles(route){
                 lat = trains.data[i].attributes.latitude;
                 lon = trains.data[i].attributes.longitude;
                 var loc = new google.maps.LatLng(lat, lon);
+                if(dir == 0)
+                    dir = "Southbound";
+                else
+                    dir = "Northbound";
                 for (j = 0; j < trains.included.length; j++){
                     if(trains.included[j].id == trains.data[i].relationships.stop.data.id){
                         name = trains.included[j].attributes.name;
@@ -684,7 +635,7 @@ function gc_vehicles(route){
                 gctrain_ray[i] = new google.maps.Marker({
                     position: loc,
                     icon: train_icon,
-                    title: "<h1>" + status + " " + name + "</h1>"
+                    title: "<h1>" + status + " " + name + " (" + dir + ")</h1>"
                 });
 
                 content =  "<p>" + status + " " + name + "</p>";
@@ -739,6 +690,10 @@ function gd_vehicles(route){
                 lat = trains.data[i].attributes.latitude;
                 lon = trains.data[i].attributes.longitude;
                 var loc = new google.maps.LatLng(lat, lon);
+                if(dir == 0)
+                    dir = "Southbound";
+                else
+                    dir = "Northbound";
                 for (j = 0; j < trains.included.length; j++){
                     if(trains.included[j].id == trains.data[i].relationships.stop.data.id){
                         name = trains.included[j].attributes.name;
@@ -751,7 +706,7 @@ function gd_vehicles(route){
                 gdtrain_ray[i] = new google.maps.Marker({
                     position: loc,
                     icon: train_icon,
-                    title: "<h1>" + status + " " + name + "</h1>"
+                    title: "<h1>" + status + " " + name + " (" + dir + ")</h1>"
                 });
 
                 content =  "<p>" + status + " " + name + "</p>";
@@ -806,6 +761,12 @@ function ge_vehicles(route){
                 lat = trains.data[i].attributes.latitude;
                 lon = trains.data[i].attributes.longitude;
                 var loc = new google.maps.LatLng(lat, lon);
+                dir = trains.data[i].attributes.direction_id;
+                if(dir == 0)
+                    dir = "Southbound";
+                else
+                    dir = "Northbound";
+
                 for (j = 0; j < trains.included.length; j++){
                     if(trains.included[j].id == trains.data[i].relationships.stop.data.id){
                         name = trains.included[j].attributes.name;
@@ -818,7 +779,7 @@ function ge_vehicles(route){
                 getrain_ray[i] = new google.maps.Marker({
                     position: loc,
                     icon: train_icon,
-                    title: "<h1>" + status + " " + name + "</h1>"
+                    title: "<h1>" + status + " " + name + " (" + dir + ")</h1>"
                 });
 
                 content =  "<p>" + status + " " + name + "</p>";
