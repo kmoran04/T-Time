@@ -10,14 +10,14 @@ body {
 }
 
 p {
-    size: 20px;
-    font-family: Helvetica, "Helvetica Neue", Arial, sans-serif;
+    size: 10px;
+    /*font-family: Helvetica, "Helvetica Neue", Arial, sans-serif;*/
     color: white;
     padding: 10px;
 }
 
 h1 {
-    size: 50px;
+    size: 10px;
 }
 
 #map_canvas {
@@ -27,12 +27,11 @@ h1 {
 
 #overlay {
     position: fixed; /* Sit on top of the page content */
-    /*display: none; /* Hidden by default */ 
-    width: 10%; /* Full width (cover the whole page) */
-    height: 10%; /* Full height (cover the whole page) */
-
+    width: 100%; /* Full width (cover the whole page) */
+    height: 8%; /* Full height (cover the whole page) */
+    text-align: center;
     right: 0;
-    bottom: 0;
+    top: 0;
     background-color: rgba(0,0,0,0.85); /* Black background with opacity */
     z-index: 2; /* Specify a stack order in case you're using a different order for other elements */
     cursor: pointer; /* Add a pointer on hover */
