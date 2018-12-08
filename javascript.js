@@ -11,7 +11,7 @@ var map;
 var marker;
 var address;
 var path;
-var infowindow;
+
 
 var marker_ray;
 var stations;
@@ -19,16 +19,16 @@ var stations;
 var station_icon = "MBTA_icon.png";
 var cycle = 0;
 
-var count = 30;
+var count = 15;
     var x = setInterval(function() {
         if (count == 0)
-            count = 30;
+            count = 15;
         count = count - 1;
         document.getElementById("timer").innerHTML = count + " seconds until refresh";
 
     }, 1000);
 
-var intervalID = window.setInterval(vehicle_helper, 30000); //refreshes every 30 seconds
+var intervalID = window.setInterval(vehicle_helper, 15000); //refreshes every 30 seconds
 
 
 
@@ -54,7 +54,7 @@ function renderMap() {
 
 function addInfoWindow(marker, message) {
     var infoWindow = new google.maps.InfoWindow({
-        content: marker.title + message 
+        content: marker.title 
     });
 
     google.maps.event.addListener(marker, 'click', function () {
@@ -97,7 +97,7 @@ function orange_line(){
                 orange_ray[j] = new google.maps.Marker({
                     position: stop,
                     icon: station_icon,
-                    title: "<h1>Station: " + paths.included[j].attributes.name + "</h1>"
+                    title: "<h1 class='station'> " + paths.included[j].attributes.name + "</h1>"
                 });
 
 
@@ -147,7 +147,7 @@ function blue() {
                 blue_ray[j] = new google.maps.Marker({
                     position: stop,
                     icon: station_icon,
-                    title: "<h1>Station: " + paths.included[j].attributes.name + "</h1>"
+                    title: "<h1 class='station'> " + paths.included[j].attributes.name + "</h1>"
                 });
 
 
@@ -197,7 +197,7 @@ function red() {
                     red_ray[j] = new google.maps.Marker({
                     position: stop,
                     icon: station_icon,
-                    title: "<h1>Station: " + paths.included[j].attributes.name + "</h1>"
+                    title: "<h1 class='station'> " + paths.included[j].attributes.name + "</h1>"
                 });
 
 
@@ -259,7 +259,7 @@ function green_helper(line)
                     green_ray[j] = new google.maps.Marker({
                     position: stop,
                     icon: station_icon,
-                    title: "<h1>Station: " + paths.included[j].attributes.name + "</h1>"
+                    title: "<h1 class='station'> " + paths.included[j].attributes.name + "</h1>"
                 });
 
 
@@ -346,7 +346,7 @@ function red_vehicles(route){
                 rtrain_ray[i] = new google.maps.Marker({
                     position: loc,
                     icon: train_icon,
-                    title: "<h1>" + status + " " + name + " (" + dir + ")</h1>"
+                    title: "<h2>" + status + "</h2> <h1>" + name + " (" + dir + ")</h1>"
                 });
 
                 content =  "<p>" + status + " " + name + "</p>";
@@ -424,7 +424,7 @@ function blue_vehicles(route){
                 btrain_ray[i] = new google.maps.Marker({
                     position: loc,
                     icon: train_icon,
-                    title: "<h1>" + status + " " + name + " (" + dir + ")</h1>"
+                    title: "<h2>" + status + "</h2> <h1>" + name + " (" + dir + ")</h1>"
                 });
 
                 content =  "<p>" + status + " " + name + "</p>";
@@ -496,7 +496,7 @@ function orange_vehicles(route){
                 otrain_ray[i] = new google.maps.Marker({
                     position: loc,
                     icon: train_icon,
-                   title: "<h1>" + status + " " + name + " (" + dir + ")</h1>"
+                   title: "<h2>" + status + "</h2> <h1>" + name + " (" + dir + ")</h1>"
                 });
 
                 content =  "<p>" + status + " " + name + "</p>";
@@ -568,7 +568,7 @@ function gb_vehicles(route){
                 gbtrain_ray[i] = new google.maps.Marker({
                     position: loc,
                     icon: train_icon,
-                    title: "<h1>" + status + " " + name + " (" + dir + ")</h1>"
+                    title: "<h2>" + status + "</h2> <h1>" + name + " (" + dir + ")</h1>"
                 });
 
                 content =  "<p>" + status + " " + name + "</p>";
@@ -640,7 +640,7 @@ function gc_vehicles(route){
                 gctrain_ray[i] = new google.maps.Marker({
                     position: loc,
                     icon: train_icon,
-                    title: "<h1>" + status + " " + name + " (" + dir + ")</h1>"
+                    title: "<h2>" + status + "</h2> <h1>" + name + " (" + dir + ")</h1>"
                 });
 
                 content =  "<p>" + status + " " + name + "</p>";
@@ -712,7 +712,7 @@ function gd_vehicles(route){
                 gdtrain_ray[i] = new google.maps.Marker({
                     position: loc,
                     icon: train_icon,
-                    title: "<h1>" + status + " " + name + " (" + dir + ")</h1>"
+                    title: "<h2>" + status + "</h2> <h1>" + name + " (" + dir + ")</h1>"
                 });
 
                 content =  "<p>" + status + " " + name + "</p>";
@@ -785,7 +785,7 @@ function ge_vehicles(route){
                 getrain_ray[i] = new google.maps.Marker({
                     position: loc,
                     icon: train_icon,
-                    title: "<h1>" + status + " " + name + " (" + dir + ")</h1>"
+                    title: "<h2>" + status + "</h2> <h1>" + name + " (" + dir + ")</h1>"
                 });
 
                 content =  "<p>" + status + " " + name + "</p>";

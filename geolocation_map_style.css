@@ -10,14 +10,18 @@ body {
 }
 
 p {
-    size: 10px;
     /*font-family: Helvetica, "Helvetica Neue", Arial, sans-serif;*/
     color: white;
     padding: 10px;
 }
 
 h1 {
-    size: 10px;
+    font-size: 15px;
+}
+
+h2{
+    font-size: 12px;
+    font-weight: normal;
 }
 
 #map_canvas {
@@ -36,3 +40,10 @@ h1 {
     z-index: 2; /* Specify a stack order in case you're using a different order for other elements */
     cursor: pointer; /* Add a pointer on hover */
 } /*reference: https://www.w3schools.com/howto/howto_css_overlay.asp; */
+
+.station {
+    font-weight: bold;
+    font-size: 11px;
+    line-height: 5px;
+
+}
