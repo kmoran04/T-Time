@@ -97,6 +97,7 @@ function orange_line(){
                 orange_ray[j] = new google.maps.Marker({
                     position: stop,
                     icon: station_icon,
+                    zIndex: 1,
                     title: "<h1 class='station'> " + paths.included[j].attributes.name + "</h1>"
                 });
 
@@ -147,6 +148,7 @@ function blue() {
                 blue_ray[j] = new google.maps.Marker({
                     position: stop,
                     icon: station_icon,
+                    zIndex: 1,
                     title: "<h1 class='station'> " + paths.included[j].attributes.name + "</h1>"
                 });
 
@@ -197,6 +199,7 @@ function red() {
                     red_ray[j] = new google.maps.Marker({
                     position: stop,
                     icon: station_icon,
+                    zIndex: 1,
                     title: "<h1 class='station'> " + paths.included[j].attributes.name + "</h1>"
                 });
 
@@ -259,6 +262,7 @@ function green_helper(line)
                     green_ray[j] = new google.maps.Marker({
                     position: stop,
                     icon: station_icon,
+                    zIndex: 1,
                     title: "<h1 class='station'> " + paths.included[j].attributes.name + "</h1>"
                 });
 
@@ -346,6 +350,7 @@ function red_vehicles(route){
                 rtrain_ray[i] = new google.maps.Marker({
                     position: loc,
                     icon: train_icon,
+                    zIndex: 2,
                     title: "<h2>" + status + "</h2> <h1>" + name + " (" + dir + ")</h1>"
                 });
 
@@ -424,6 +429,7 @@ function blue_vehicles(route){
                 btrain_ray[i] = new google.maps.Marker({
                     position: loc,
                     icon: train_icon,
+                    zIndex: 2,
                     title: "<h2>" + status + "</h2> <h1>" + name + " (" + dir + ")</h1>"
                 });
 
@@ -496,6 +502,7 @@ function orange_vehicles(route){
                 otrain_ray[i] = new google.maps.Marker({
                     position: loc,
                     icon: train_icon,
+                    zIndex: 2,
                    title: "<h2>" + status + "</h2> <h1>" + name + " (" + dir + ")</h1>"
                 });
 
@@ -568,6 +575,7 @@ function gb_vehicles(route){
                 gbtrain_ray[i] = new google.maps.Marker({
                     position: loc,
                     icon: train_icon,
+                    zIndex: 2,
                     title: "<h2>" + status + "</h2> <h1>" + name + " (" + dir + ")</h1>"
                 });
 
@@ -640,6 +648,7 @@ function gc_vehicles(route){
                 gctrain_ray[i] = new google.maps.Marker({
                     position: loc,
                     icon: train_icon,
+                    zIndex: 2,
                     title: "<h2>" + status + "</h2> <h1>" + name + " (" + dir + ")</h1>"
                 });
 
@@ -712,6 +721,7 @@ function gd_vehicles(route){
                 gdtrain_ray[i] = new google.maps.Marker({
                     position: loc,
                     icon: train_icon,
+                    zIndex: 2,
                     title: "<h2>" + status + "</h2> <h1>" + name + " (" + dir + ")</h1>"
                 });
 
@@ -785,6 +795,7 @@ function ge_vehicles(route){
                 getrain_ray[i] = new google.maps.Marker({
                     position: loc,
                     icon: train_icon,
+                    zIndex: 2,
                     title: "<h2>" + status + "</h2> <h1>" + name + " (" + dir + ")</h1>"
                 });
 
