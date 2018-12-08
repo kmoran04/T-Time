@@ -19,16 +19,16 @@ var stations;
 var station_icon = "MBTA_icon.png";
 var cycle = 0;
 
-var count = 15;
+var count = 20;
     var x = setInterval(function() {
         if (count == 0)
-            count = 15;
+            count = 20;
         count = count - 1;
         document.getElementById("timer").innerHTML = count + " seconds until refresh";
 
     }, 1000);
 
-var intervalID = window.setInterval(vehicle_helper, 15000); //refreshes every 30 seconds
+var intervalID = window.setInterval(vehicle_helper, 20000); //refreshes every 30 seconds
 
 
 
@@ -54,7 +54,7 @@ function renderMap() {
 
 function addInfoWindow(marker, message) {
     var infoWindow = new google.maps.InfoWindow({
-        content: marker.title 
+        content: marker.title
     });
 
     google.maps.event.addListener(marker, 'click', function () {
@@ -62,6 +62,75 @@ function addInfoWindow(marker, message) {
     });
 }
 
+function s_addInfoWindow(marker, id) {
+
+    var infoWindow = new google.maps.InfoWindow({
+        content: marker.title
+    });
+
+    google.maps.event.addListener(marker, 'click', function () {
+        infoWindow.open(map, marker);
+    });
+
+    google.maps.event.addListener(marker, 'dblclick', function () {
+
+        console.log("dblclick");
+        var sched = '';
+        var request = new XMLHttpRequest();
+        address = "https://api-v3.mbta.com/predictions?filter[stop]=" + id + "&page[limit]=5&page[offset]=0&sort=departure_time";
+        request.open("GET", address, true);
+
+        request.onreadystatechange = function() {
+            if (request.readyState == 4 && request.status == 200) 
+            {
+                var time;
+                var direction;
+                theData = request.responseText;
+                station = JSON.parse(theData);
+
+
+                for (j = 0; j < station.data.length; j++) {
+
+                    current = station.data[j];
+
+                    time = current.attributes.departure_time;
+
+                    if (current.attributes.direction_id == 1)
+                        direction = "(Northbound)";
+                    else
+                        direction = "(Southbound)";
+
+                    var dir = "Departing";
+
+                    if (time == null){
+                        time = current.attributes.arrival_time;
+                        dir = "Arriving";
+                    }
+
+                    if (time != null)
+                        time = time.substr(11, 8);
+                    else
+                        time = "No time available";
+
+                    sched += dir + ': ' + time + " " + direction + "\n";
+                }
+
+                if (sched == '')
+                    sched = "Not available";
+
+                infoWindow.content += sched;
+                console.log(infoWindow.content);
+                alert(sched);
+                
+
+            }
+        
+    }
+    
+    request.send();
+    });
+
+}
 
 
 function orange_line(){
@@ -94,6 +163,7 @@ function orange_line(){
 
             for (j = 0; j < paths.included.length; j++){
                 var stop = new google.maps.LatLng(paths.included[j].attributes.latitude, paths.included[j].attributes.longitude);
+
                 orange_ray[j] = new google.maps.Marker({
                     position: stop,
                     icon: station_icon,
@@ -102,9 +172,9 @@ function orange_line(){
                 });
 
 
-                content = "";
+                content = paths.included[j].id;
                 
-                addInfoWindow(orange_ray[j], content);
+                s_addInfoWindow(orange_ray[j], content);
             
                 orange_ray[j].setMap(map);
                 
@@ -153,9 +223,9 @@ function blue() {
                 });
 
 
-                content = "";
+                content = paths.included[j].id;
                 
-                addInfoWindow(blue_ray[j], content);
+                s_addInfoWindow(blue_ray[j], content);
             
                 blue_ray[j].setMap(map);
             
@@ -204,9 +274,9 @@ function red() {
                 });
 
 
-                content = "";
+                content = paths.included[j].id;
                 
-                addInfoWindow(red_ray[j], content);
+                s_addInfoWindow(red_ray[j], content);
             
                 red_ray[j].setMap(map);
             }
@@ -267,9 +337,9 @@ function green_helper(line)
                 });
 
 
-                content = "";
+                content = paths.included[j].id;
                 
-                addInfoWindow(green_ray[j], content);
+                s_addInfoWindow(green_ray[j], content);
                 green_ray[j].setMap(map);
             }
                 
