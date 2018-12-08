@@ -328,6 +328,7 @@ function red_vehicles(route){
                 lat = trains.data[i].attributes.latitude;
                 lon = trains.data[i].attributes.longitude;
                 var loc = new google.maps.LatLng(lat, lon);
+                dir = trains.data[i].attributes.direction_id;
                 if(dir == 0)
                     dir = "Southbound";
                 else
@@ -340,7 +341,7 @@ function red_vehicles(route){
                 }
 
                 status = trains.data[i].attributes.current_status;
-                console.log(status);
+                
         
                 rtrain_ray[i] = new google.maps.Marker({
                     position: loc,
@@ -406,6 +407,7 @@ function blue_vehicles(route){
                 lat = trains.data[i].attributes.latitude;
                 lon = trains.data[i].attributes.longitude;
                 var loc = new google.maps.LatLng(lat, lon);
+                dir = trains.data[i].attributes.direction_id;
                 if(dir == 0)
                     dir = "Southbound";
                 else
@@ -477,6 +479,7 @@ function orange_vehicles(route){
                 lat = trains.data[i].attributes.latitude;
                 lon = trains.data[i].attributes.longitude;
                 var loc = new google.maps.LatLng(lat, lon);
+                dir = trains.data[i].attributes.direction_id;
                 if(dir == 0)
                     dir = "Southbound";
                 else
@@ -548,6 +551,7 @@ function gb_vehicles(route){
                 lat = trains.data[i].attributes.latitude;
                 lon = trains.data[i].attributes.longitude;
                 var loc = new google.maps.LatLng(lat, lon);
+                dir = trains.data[i].attributes.direction_id;
                 if(dir == 0)
                     dir = "Southbound";
                 else
@@ -619,6 +623,7 @@ function gc_vehicles(route){
                 lat = trains.data[i].attributes.latitude;
                 lon = trains.data[i].attributes.longitude;
                 var loc = new google.maps.LatLng(lat, lon);
+                dir = trains.data[i].attributes.direction_id;
                 if(dir == 0)
                     dir = "Southbound";
                 else
@@ -690,6 +695,7 @@ function gd_vehicles(route){
                 lat = trains.data[i].attributes.latitude;
                 lon = trains.data[i].attributes.longitude;
                 var loc = new google.maps.LatLng(lat, lon);
+                dir = trains.data[i].attributes.direction_id;
                 if(dir == 0)
                     dir = "Southbound";
                 else
